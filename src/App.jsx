@@ -1,5 +1,11 @@
+import Landing from "./pages/Landing";
+
 function App() {
-  return <h2>jobster project</h2>;
+  return (
+    <>
+      <Landing />
+    </>
+  );
 }
 
 export default App;
