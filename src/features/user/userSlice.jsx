@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -6,10 +7,18 @@ const initialState = {
   user: null,
 };
 
+const baseURL = "https://jobify-prod.herokuapp.com/api/v1/toolkit";
+
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (user, thunkAPI) => {
-    console.log(`Register User : ${user}`);
+    try {
+      const res = await axios.post(`${baseURL}/auth/testingRegister`, user);
+      console.log(res);
+    } catch (error) {
+      toast.error(error.response.data.msg);
+      // console.log(error.response);
+    }
   }
 );
 
