@@ -17,12 +17,21 @@ const Register = () => {
   };
 
   const handleChange = (e) => {
-    console.log(e.target.value);
+    const name = e.target.name;
+    const value = e.target.value;
+
+    // console.log(`name: ${name}, value: ${value}`);
+    setValues({ ...values, [name]: value });
+    console.log(values);
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(e.target);
+    const { email, password, isMember, name } = values;
+    if (!email || !password || (!isMember && !name)) {
+      console.log("ERROR: Provide all values");
+      return;
+    }
   };
 
   return (
