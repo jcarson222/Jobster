@@ -1,6 +1,5 @@
-import Dashboard from "./Dashboard";
 import Landing from "./Landing";
 import Error from "./Error";
 import Register from "./Register";
 
-export { Dashboard, Register, Landing, Error };
+export { Register, Landing, Error };
