@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import {
   getUserFromLocalStorage,
   addUserToLocalStorage,
+  removeUserFromLocalStorage,
 } from "../../utils/localStorage";
 
 const initialState = {
@@ -50,6 +51,11 @@ const userSlice = createSlice({
       state.isSidebarOpen = !state.isSidebarOpen;
       console.log(state.isSidebarOpen);
     },
+    logoutUser: (state) => {
+      state.user = null;
+      state.isSidebarOpen = false;
+      removeUserFromLocalStorage();
+    },
   },
 
   extraReducers: (builder) => {
@@ -88,4 +94,4 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { toggleSidebar } = userSlice.actions;
+export const { toggleSidebar, logoutUser } = userSlice.actions;
