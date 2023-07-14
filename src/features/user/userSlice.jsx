@@ -1,10 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
+import {
+  getUserFromLocalStorage,
+  addUserToLocalStorage,
+} from "../../utils/localStorage";
 
 const initialState = {
   isLoading: false,
-  user: null,
+  user: getUserFromLocalStorage(),
 };
 
 const baseURL = "https://jobify-prod.herokuapp.com/api/v1/toolkit";
@@ -26,8 +30,8 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (user, thunkAPI) => {
     try {
+      // console.log(user);
       const res = await axios.post(`${baseURL}/auth/login`, user);
-
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -48,6 +52,7 @@ const userSlice = createSlice({
         const { user } = payload;
         state.isLoading = false;
         state.user = user;
+        addUserToLocalStorage(user);
         toast.success(`Welcome, ${user.name}`);
       })
       .addCase(registerUser.rejected, (state, { payload }) => {
@@ -62,6 +67,7 @@ const userSlice = createSlice({
         const { user } = payload;
         state.isLoading = false;
         state.user = user;
+        addUserToLocalStorage(user);
         toast.success(`Welcome back, ${user.name}`);
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
