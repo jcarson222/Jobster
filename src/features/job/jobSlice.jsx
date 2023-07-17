@@ -24,8 +24,11 @@ const jobSlice = createSlice({
       // state[name] --> handles state value dynamically
       state[name] = value;
     },
+    clearValues: () => {
+      return initialState;
+    },
   },
 });
 
-export const { handleChange } = jobSlice.actions;
+export const { handleChange, clearValues } = jobSlice.actions;
 export default jobSlice.reducer;
