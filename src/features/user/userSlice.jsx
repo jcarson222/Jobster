@@ -45,6 +45,7 @@ export const updateUser = createAsyncThunk(
   "user/updateUser",
   async (user, thunkAPI) => {
     try {
+      // console.log(thunkAPI.getState())---(for reference)
       const res = await axios.patch(`${baseURL}/auth/updateUser`, user, {
         headers: {
           authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
