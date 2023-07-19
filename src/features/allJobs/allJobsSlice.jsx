@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import customFetch from "../../utils/axios";
 
 const initialFiltersState = {
   search: "",
@@ -11,7 +10,7 @@ const initialFiltersState = {
 };
 
 const initialState = {
-  isLoading: false,
+  isLoading: true,
   jobs: [],
   totalJobs: 0,
   numOfPages: 1,
@@ -20,3 +19,10 @@ const initialState = {
   monthlyApplications: [],
   ...initialFiltersState,
 };
+
+const allJobsSlice = createSlice({
+  name: "allJobs",
+  initialState,
+});
+
+export default allJobsSlice.reducer;
