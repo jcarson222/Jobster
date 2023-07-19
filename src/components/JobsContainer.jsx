@@ -7,6 +7,7 @@ import { getAllJobs } from "../features/allJobs/allJobsSlice";
 
 const JobsContainer = () => {
   const { isLoading, jobs } = useSelector((store) => store.allJobs);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
