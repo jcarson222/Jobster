@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { toast } from "react-toastify";
+import customFetch from "../../utils/axios";
 import { showLoading, hideLoading, getAllJobs } from "../allJobs/allJobsSlice";
 
 const initialState = {
@@ -16,17 +16,11 @@ const initialState = {
   editJobId: "",
 };
 
-const baseURL = "https://jobify-prod.herokuapp.com/api/v1/toolkit";
-
 export const createJob = createAsyncThunk(
   "job/createJob",
   async (job, thunkAPI) => {
     try {
-      const res = await axios.post(`${baseURL}/jobs`, job, {
-        headers: {
-          authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
-        },
-      });
+      const res = await customFetch.post(`/jobs`, job);
       thunkAPI.dispatch(clearValues());
       return res.data;
     } catch (error) {
@@ -41,11 +35,7 @@ export const deleteJob = createAsyncThunk(
     thunkAPI.dispatch(showLoading());
 
     try {
-      const resp = await axios.delete(`${baseURL}/jobs/${jobId}`, {
-        headers: {
-          authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
-        },
-      });
+      const resp = await customFetch.delete(`/jobs/${jobId}`);
 
       thunkAPI.dispatch(getAllJobs());
       return resp.data; // <-- this will just be a success message.
@@ -60,11 +50,7 @@ export const editJob = createAsyncThunk(
   "job/editJob",
   async ({ jobId, job }, thunkAPI) => {
     try {
-      const resp = await axios.patch(`${baseURL}/jobs/${jobId}`, job, {
-        headers: {
-          authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
-        },
-      });
+      const resp = await customFetch.patch(`/jobs/${jobId}`, job);
       thunkAPI.dispatch(clearValues());
       return resp.data;
     } catch (error) {
