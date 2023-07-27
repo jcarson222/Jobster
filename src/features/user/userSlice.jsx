@@ -7,6 +7,9 @@ import {
   removeUserFromLocalStorage,
 } from "../../utils/localStorage";
 
+import { clearAllJobsState } from "../allJobs/allJobsSlice";
+import { clearValues } from "../job/jobSlice";
+
 const initialState = {
   isLoading: false,
   isSidebarOpen: false,
@@ -58,6 +61,24 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const clearStore = createAsyncThunk(
+  "user/clearStore",
+  async (message, thunkAPI) => {
+    try {
+      // logout user
+      thunkAPI.dispatch(logoutUser());
+      // clear jobs value
+      thunkAPI.dispatch(clearAllJobsState());
+      // clear job input values
+      thunkAPI.dispatch(clearValues());
+      return Promise.resolve();
+    } catch (error) {
+      // console.log(error);
+      return Promise.reject();
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
 
@@ -105,6 +126,10 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
+      })
+      // LOGOUT
+      .addCase(clearStore.rejected, () => {
+        toast.error("There was an error...");
       })
       // UPDATE USER
       .addCase(updateUser.pending, (state) => {

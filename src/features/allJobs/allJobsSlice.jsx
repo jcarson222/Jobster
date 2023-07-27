@@ -26,11 +26,22 @@ export const getAllJobs = createAsyncThunk(
   "allJobs/getJobs",
   // (_ --> we don't need the first parameter since this is only a 'get' request and we're not sending any data)
   async (_, thunkAPI) => {
-    const url = "/jobs";
+    const { page, search, searchStatus, searchType, sort } =
+      thunkAPI.getState().allJobs;
+
+    const url = `/jobs`;
 
     try {
-      const resp = await customFetch.get(url);
-      // console.log(resp.data);
+      const resp = await customFetch.get(url, {
+        params: {
+          search,
+          status: searchStatus,
+          jobType: searchType,
+          sort,
+          page,
+        },
+      });
+
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -63,10 +74,17 @@ const allJobsSlice = createSlice({
       state.isLoading = false;
     },
     handleChange: (state, { payload: { name, value } }) => {
+      state.page = 1;
       state[name] = value;
     },
     clearFilters: (state) => {
       return { ...state, ...initialFiltersState };
+    },
+    changePage: (state, { payload }) => {
+      state.page = payload;
+    },
+    clearAllJobsState: (state) => {
+      return initialState;
     },
   },
   extraReducers: (builder) => {
@@ -100,5 +118,11 @@ const allJobsSlice = createSlice({
 });
 
 export default allJobsSlice.reducer;
-export const { showLoading, hideLoading, handleChange, clearFilters } =
-  allJobsSlice.actions;
+export const {
+  showLoading,
+  hideLoading,
+  handleChange,
+  clearFilters,
+  changePage,
+  clearAllJobsState,
+} = allJobsSlice.actions;
